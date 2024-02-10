@@ -39,7 +39,8 @@ def download_image(image_url, folder='previews/'):
         my_file.write(response.content)
 
 
-def parse_book_page(parsed_book):
+def parse_book_page(page_response):
+    parsed_book = BeautifulSoup(page_response.text, 'lxml')
     title_tag = parsed_book.find(id='content').find('h1')
     title_and_author = title_tag.text
     title_and_author = title_and_author.split('::')
@@ -79,8 +80,7 @@ for book_id in range(1, 11):
         downloaded_book_response = requests.get(download_url, params=params)
         downloaded_book_response.raise_for_status()
         check_for_redirect(downloaded_book_response)
-        parsed_book = BeautifulSoup(page_response.text, 'lxml')
-        book_page = parse_book_page(parsed_book)
+        book_page = parse_book_page(page_response)
         download_txt(downloaded_book_response, book_page['title'])
         download_image(book_page['image'])
         print(book_page)
