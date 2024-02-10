@@ -39,6 +39,32 @@ def download_image(image_url, folder='previews/'):
         my_file.write(response.content)
 
 
+def parse_book_page(parsed_book):
+    title_tag = parsed_book.find(id='content').find('h1')
+    title_and_author = title_tag.text
+    title_and_author = title_and_author.split('::')
+    title = title_and_author[0].rstrip()
+    picture = parsed_book.find('div', class_='bookimage').find('img')['src']
+    image_url = urllib.parse.urljoin(url_pattern, picture)
+    comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
+    comments = []
+    for comment in comment_section_tag:
+        comment = comment.text.split(')')[-1]
+        comments.append(comment)
+    genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
+    genres = []
+    for genre in genres_tag:
+        genre = genre.text
+        genres.append(genre)
+    book_page = {
+        'title': title,
+        'image': image_url,
+        'comments': comments,
+        'genres': genres
+    }
+    return book_page
+
+
 url_pattern = 'https://tululu.org/'
 download_url = 'https://tululu.org/txt.php'
 for book_id in range(1, 11):
@@ -54,26 +80,9 @@ for book_id in range(1, 11):
         downloaded_book_response.raise_for_status()
         check_for_redirect(downloaded_book_response)
         parsed_book = BeautifulSoup(page_response.text, 'lxml')
-        title_tag = parsed_book.find(id='content').find('h1')
-        title_and_author = title_tag.text
-        title_and_author = title_and_author.split('::')
-        title = title_and_author[0].rstrip()
-        download_txt(downloaded_book_response, title)
-        picture = parsed_book.find('div', class_='bookimage').find('img')['src']
-        image_url = urllib.parse.urljoin(url_pattern, picture)
-        download_image(image_url)
-        comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
-        comments = []
-        for comment in comment_section_tag:
-            comment = comment.text.split(')')[-1]
-            comments.append(comment)
-        genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
-        genres = []
-        for genre in genres_tag:
-            genre = genre.text
-            genres.append(genre)
-        print(title, genres)
+        book_page = parse_book_page(parsed_book)
+        download_txt(downloaded_book_response, book_page['title'])
+        download_image(book_page['image'])
+        print(book_page)
     except requests.exceptions.HTTPError:
         print('Такой книги не существует')
-    # if download_book:
-        # download_txt(download_book, title, 'books/')
