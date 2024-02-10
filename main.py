@@ -67,13 +67,13 @@ for book_id in range(1, 11):
         for comment in comment_section_tag:
             comment = comment.text.split(')')[-1]
             comments.append(comment)
-        print(comments)
+        genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
+        genres = []
+        for genre in genres_tag:
+            genre = genre.text
+            genres.append(genre)
+        print(title, genres)
     except requests.exceptions.HTTPError:
         print('Такой книги не существует')
-    # genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
-    # genres = []
-    # for genre in genres_tag:
-    #     genre = genre.text
-    #     genres.append(genre)
     # if download_book:
         # download_txt(download_book, title, 'books/')
