@@ -27,16 +27,16 @@ def check_for_redirect(response):
     if response.history:
         raise requests.exceptions.HTTPError
 
-# def download_image(image_url, picture, book_id, folder='previews/'):
-#     response = requests.get(image_url)
-#     if picture == '/images/nopic.gif':
-#         file_name = 'nopic' + str(book_id) + '.gif'
-#         pass
-#     else:
-#         file_name = str(book_id) + '.jpg'
-#     filepath = os.path.join(folder, file_name)
-#     with open(filepath, "wb") as my_file:
-#         my_file.write(response.content)
+
+def download_image(image_url, folder='previews/'):
+    folder = sanitize_filepath(folder)
+    picture_name = image_url.split('/')[-1]
+    created_folder = Path(folder).mkdir(parents=True, exist_ok=True)
+    file_name = sanitize_filename(picture_name)
+    response = requests.get(image_url)
+    filepath = os.path.join(folder, file_name)
+    with open(filepath, "wb") as my_file:
+        my_file.write(response.content)
 
 
 url_pattern = 'https://tululu.org/'
@@ -59,7 +59,9 @@ for book_id in range(1, 11):
         title_and_author = title_and_author.split('::')
         title = title_and_author[0].rstrip()
         download_txt(downloaded_book_response, title)
-        print(title)
+        picture = parsed_book.find('div', class_='bookimage').find('img')['src']
+        image_url = urllib.parse.urljoin(url_pattern, picture)
+        download_image(image_url)
     except requests.exceptions.HTTPError:
         print('Такой книги не существует')
     # genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
@@ -67,7 +69,6 @@ for book_id in range(1, 11):
     # for genre in genres_tag:
     #     genre = genre.text
     #     genres.append(genre)
-    # picture = parsed_book.find('div', class_='bookimage').find('img')['src']
     # comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
     # comments = []
     # for comment in comment_section_tag:
