@@ -62,6 +62,12 @@ for book_id in range(1, 11):
         picture = parsed_book.find('div', class_='bookimage').find('img')['src']
         image_url = urllib.parse.urljoin(url_pattern, picture)
         download_image(image_url)
+        comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
+        comments = []
+        for comment in comment_section_tag:
+            comment = comment.text.split(')')[-1]
+            comments.append(comment)
+        print(comments)
     except requests.exceptions.HTTPError:
         print('Такой книги не существует')
     # genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
@@ -69,11 +75,5 @@ for book_id in range(1, 11):
     # for genre in genres_tag:
     #     genre = genre.text
     #     genres.append(genre)
-    # comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
-    # comments = []
-    # for comment in comment_section_tag:
-    #     comment = comment.text
-    #     comments.append(comment)
-    # image_url = urllib.parse.urljoin(url_pattern, picture)
     # if download_book:
         # download_txt(download_book, title, 'books/')
