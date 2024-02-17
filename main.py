@@ -7,6 +7,7 @@ from pathvalidate import sanitize_filename
 from pathvalidate import sanitize_filepath
 from pathlib import Path
 import urllib3
+import argparse
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -68,7 +69,14 @@ def parse_book_page(page_response):
 
 url_pattern = 'https://tululu.org/'
 download_url = 'https://tululu.org/txt.php'
-for book_id in range(1, 11):
+parser = argparse.ArgumentParser(
+    description='Это программа является парсером бесплатной онлайн-библиотеки Tululu'
+)
+parser.add_argument('--start_id', help='С какого id книги мы начинаем парсинг', type=int, default=1)
+parser.add_argument('--end_id', help='С какого id книги мы начинаем парсинг', type=int, default=20)
+args = parser.parse_args()
+
+for book_id in range(args.start_id, args.end_id):
     url = f"{url_pattern}b{book_id}/"
     params = {
         'id': book_id
