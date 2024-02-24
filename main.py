@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import lxml
 import urllib
 import os
 from pathvalidate import sanitize_filename
