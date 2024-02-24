@@ -90,6 +90,6 @@ for book_id in range(args.start_id, args.end_id):
         book_page = parse_book_page(page_response)
         download_txt(downloaded_book_response, book_page['title'])
         download_image(book_page['image'])
-        print(book_page)
+        print('Данные книги удалось спарсить!')
     except requests.exceptions.HTTPError:
         print('Такой книги не существует')
