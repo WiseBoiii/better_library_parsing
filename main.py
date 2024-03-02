@@ -34,6 +34,7 @@ def download_image(image_url, folder='previews/'):
     created_folder = Path(folder).mkdir(parents=True, exist_ok=True)
     file_name = sanitize_filename(picture_name)
     response = requests.get(image_url)
+    response.raise_for_status()
     filepath = os.path.join(folder, file_name)
     with open(filepath, "wb") as image_file:
         image_file.write(response.content)
