@@ -66,30 +66,35 @@ def parse_book_page(page_response):
     return book_page
 
 
-url_pattern = 'https://tululu.org/'
-download_url = 'https://tululu.org/txt.php'
-parser = argparse.ArgumentParser(
-    description='Это программа является парсером бесплатной онлайн-библиотеки Tululu'
-)
-parser.add_argument('--start_id', help='С какого id книги мы начинаем парсинг', type=int, default=1)
-parser.add_argument('--end_id', help='С какого id книги мы начинаем парсинг', type=int, default=20)
-args = parser.parse_args()
+def main():
+    url_pattern = 'https://tululu.org/'
+    download_url = 'https://tululu.org/txt.php'
+    parser = argparse.ArgumentParser(
+        description='Это программа является парсером бесплатной онлайн-библиотеки Tululu'
+    )
+    parser.add_argument('--start_id', help='С какого id книги мы начинаем парсинг', type=int, default=1)
+    parser.add_argument('--end_id', help='С какого id книги мы начинаем парсинг', type=int, default=20)
+    args = parser.parse_args()
 
-for book_id in range(args.start_id, args.end_id):
-    url = f"{url_pattern}b{book_id}/"
-    params = {
-        'id': book_id
-    }
-    try:
-        page_response = requests.get(url)
-        page_response.raise_for_status()
-        check_for_redirect(page_response)
-        downloaded_book_response = requests.get(download_url, params=params)
-        downloaded_book_response.raise_for_status()
-        check_for_redirect(downloaded_book_response)
-        book_page = parse_book_page(page_response)
-        download_txt(downloaded_book_response, book_page['title'])
-        download_image(book_page['image'])
-        print('Данные книги удалось спарсить!')
-    except requests.exceptions.HTTPError:
-        print('Такой книги не существует')
+    for book_id in range(args.start_id, args.end_id):
+        url = f"{url_pattern}b{book_id}/"
+        params = {
+            'id': book_id
+        }
+        try:
+            page_response = requests.get(url)
+            page_response.raise_for_status()
+            check_for_redirect(page_response)
+            downloaded_book_response = requests.get(download_url, params=params)
+            downloaded_book_response.raise_for_status()
+            check_for_redirect(downloaded_book_response)
+            book_page = parse_book_page(page_response)
+            download_txt(downloaded_book_response, book_page['title'])
+            download_image(book_page['image'])
+            print('Данные книги удалось спарсить!')
+        except requests.exceptions.HTTPError:
+            print('Такой книги не существует')
+
+
+if __name__  == '__main__':
+    main()
