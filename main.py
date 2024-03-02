@@ -39,14 +39,14 @@ def download_image(image_url, folder='previews/'):
         my_file.write(response.content)
 
 
-def parse_book_page(page_response):
+def parse_book_page(url, page_response):
     parsed_book = BeautifulSoup(page_response.text, 'lxml')
     title_tag = parsed_book.find(id='content').find('h1')
     title_and_author = title_tag.text
     title_and_author = title_and_author.split('::')
     title = title_and_author[0].rstrip()
     picture = parsed_book.find('div', class_='bookimage').find('img')['src']
-    image_url = urllib.parse.urljoin(url_pattern, picture)
+    image_url = urllib.parse.urljoin(url, picture)
     comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
     comments = []
     for comment in comment_section_tag:
@@ -88,7 +88,7 @@ def main():
             downloaded_book_response = requests.get(download_url, params=params)
             downloaded_book_response.raise_for_status()
             check_for_redirect(downloaded_book_response)
-            book_page = parse_book_page(page_response)
+            book_page = parse_book_page(url, page_response)
             download_txt(downloaded_book_response, book_page['title'])
             download_image(book_page['image'])
             print('Данные книги удалось спарсить!')
