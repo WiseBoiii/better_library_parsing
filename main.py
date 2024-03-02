@@ -48,15 +48,9 @@ def parse_book_page(url, page_response):
     picture = parsed_book.find('div', class_='bookimage').find('img')['src']
     image_url = urllib.parse.urljoin(url, picture)
     comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
-    comments = []
-    for comment in comment_section_tag:
-        comment = comment.text.split(')')[-1]
-        comments.append(comment)
+    comments = [comment.text.split(')')[-1] for comment in comment_section_tag]
     genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
-    genres = []
-    for genre in genres_tag:
-        genre = genre.text
-        genres.append(genre)
+    genres = [genres.text for genres in genres_tag]
     book_page = {
         'title': title,
         'image': image_url,
