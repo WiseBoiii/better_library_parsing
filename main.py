@@ -89,6 +89,9 @@ def main():
             print('Данные книги удалось спарсить!')
         except requests.exceptions.HTTPError:
             print('Такой книги не существует')
+        except requests.ConnectionError:
+            print('Проблемы с соединением. Идет переподключение...')
+
 
 
 if __name__  == '__main__':
