@@ -17,8 +17,8 @@ def download_txt(downloaded_book_response, title, folder='books/'):
     created_folder = Path(folder).mkdir(parents=True, exist_ok=True)
     file_name = sanitize_filename(title) + '.txt'
     filepath = os.path.join(folder, file_name)
-    with open(filepath, "w") as my_file:
-        my_file.write(downloaded_book_response.text)
+    with open(filepath, "w") as txt_file:
+        txt_file.write(downloaded_book_response.text)
 
     return filepath
 
@@ -35,8 +35,8 @@ def download_image(image_url, folder='previews/'):
     file_name = sanitize_filename(picture_name)
     response = requests.get(image_url)
     filepath = os.path.join(folder, file_name)
-    with open(filepath, "wb") as my_file:
-        my_file.write(response.content)
+    with open(filepath, "wb") as image_file:
+        image_file.write(response.content)
 
 
 def parse_book_page(url, page_response):
