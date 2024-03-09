@@ -7,6 +7,7 @@ from pathvalidate import sanitize_filepath
 from pathlib import Path
 import urllib3
 import argparse
+import time
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -63,7 +64,7 @@ def parse_book_page(url, page_response):
 
 def main():
     url_pattern = 'https://tululu.org/'
-    download_url = 'https://tululu.org/txt.php'
+    downloading_url = 'https://tululu.org/txt.php'
     parser = argparse.ArgumentParser(
         description='Это программа является парсером бесплатной онлайн-библиотеки Tululu'
     )
@@ -80,7 +81,7 @@ def main():
             page_response = requests.get(url)
             page_response.raise_for_status()
             check_for_redirect(page_response)
-            downloaded_book_response = requests.get(download_url, params=params)
+            downloaded_book_response = requests.get(downloading_url, params=params)
             downloaded_book_response.raise_for_status()
             check_for_redirect(downloaded_book_response)
             book_page = parse_book_page(url, page_response)
@@ -91,6 +92,7 @@ def main():
             print('Такой книги не существует')
         except requests.ConnectionError:
             print('Проблемы с соединением. Идет переподключение...')
+            time.sleep(5)
 
 
 
