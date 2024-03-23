@@ -9,7 +9,6 @@ import urllib3
 import argparse
 import time
 
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -95,6 +94,5 @@ def main():
             time.sleep(5)
 
 
-
-if __name__  == '__main__':
+if __name__ == '__main__':
     main()
