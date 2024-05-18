@@ -153,4 +153,3 @@ cython_debug/
 books
 previews
 .gitattributes
-all_about_fantastic_books.json
