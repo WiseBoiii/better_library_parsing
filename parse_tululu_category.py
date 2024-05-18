@@ -2,14 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import urllib3
+from main import parse_book_page, download_image, download_txt
+import json
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 fantastic_url_pattern = 'https://tululu.org/l55/'
 book_url_pattern = 'https://tululu.org/'
+downloading_url = 'https://tululu.org/txt.php'
 
 
-def parse_book_category(url_pattern, book_url_pattern):
+def parse_fantastic_category(url_pattern, book_url_pattern):
+    fantastic_books = []
     for page in range(10):
         url = f'{url_pattern}{page}'
         page_response = requests.get(url)
@@ -18,8 +22,33 @@ def parse_book_category(url_pattern, book_url_pattern):
         all_fantastic_book_ids = soup.find_all(class_='d_book')
         for fantastic_book in all_fantastic_book_ids:
             fantastic_book_id = fantastic_book.find('a')['href']
+            param_id = int(fantastic_book_id.replace('/', '').lstrip('b'))
+            params = {
+                'id': param_id
+            }
+            downloaded_fantastic_book_response = requests.get(downloading_url, params=params)
+            downloaded_fantastic_book_response.raise_for_status()
             fantastic_book_link = urllib.parse.urljoin(book_url_pattern, fantastic_book_id)
-            print(fantastic_book_link)
+            fantastic_book_response = requests.get(fantastic_book_link)
+            fantastic_book_response.raise_for_status()
+            parsed_fantastic_book = parse_book_page(fantastic_book_link, fantastic_book_response)
+            download_image(parsed_fantastic_book['image'])
+            download_txt(downloaded_fantastic_book_response, parsed_fantastic_book['title'])
+            fantastic_book_img_src = f"previews/{parsed_fantastic_book['image'].split('/')[-1]}"
+            fantastic_book_path = f"books/{parsed_fantastic_book['title']}.txt"
+            extended_parsed_fantastic_book = {
+                'title': parsed_fantastic_book['title'],
+                'author': parsed_fantastic_book['author'],
+                'img_src': fantastic_book_img_src,
+                'book_path': fantastic_book_path,
+                'comments': parsed_fantastic_book['comments'],
+                'genres': parsed_fantastic_book['genres']
+            }
+            fantastic_books.append(extended_parsed_fantastic_book)
+    all_about_fantastic_books = json.dumps(fantastic_books, ensure_ascii=False).encode('utf-8')
+    with open('all_about_fantastic_books.json', 'wb') as fantastic_book_file:
+        fantastic_book_file.write(all_about_fantastic_books)
+    return all_about_fantastic_books
 
 
-parse_book_category(fantastic_url_pattern, book_url_pattern)
+print(parse_fantastic_category(fantastic_url_pattern, book_url_pattern))

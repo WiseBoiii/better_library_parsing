@@ -17,7 +17,7 @@ def download_txt(downloaded_book_response, title, folder='books/'):
     created_folder = Path(folder).mkdir(parents=True, exist_ok=True)
     file_name = sanitize_filename(title) + '.txt'
     filepath = os.path.join(folder, file_name)
-    with open(filepath, "w") as txt_file:
+    with open(filepath, "w", encoding="utf-8") as txt_file:
         txt_file.write(downloaded_book_response.text)
 
     return filepath
@@ -44,8 +44,9 @@ def parse_book_page(url, page_response):
     parsed_book = BeautifulSoup(page_response.text, 'lxml')
     title_tag = parsed_book.find(id='content').find('h1')
     title_and_author = title_tag.text
-    title_and_author = title_and_author.split('::')
-    title = title_and_author[0].rstrip()
+    title, author = title_and_author.split('::')
+    title = sanitize_filename(title).replace(' \xa0', '')
+    author = sanitize_filename(author).replace('\xa0 ', '')
     picture = parsed_book.find('div', class_='bookimage').find('img')['src']
     image_url = urllib.parse.urljoin(url, picture)
     comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
@@ -54,6 +55,7 @@ def parse_book_page(url, page_response):
     genres = [genres.text for genres in genres_tag]
     book_page = {
         'title': title,
+        'author': author,
         'image': image_url,
         'comments': comments,
         'genres': genres
