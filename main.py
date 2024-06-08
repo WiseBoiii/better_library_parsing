@@ -42,16 +42,16 @@ def download_image(image_url, folder='previews/'):
 
 def parse_book_page(url, page_response):
     parsed_book = BeautifulSoup(page_response.text, 'lxml')
-    title_tag = parsed_book.find(id='content').find('h1')
+    title_tag = parsed_book.select_one('h1')
     title_and_author = title_tag.text
     title, author = title_and_author.split('::')
     title = sanitize_filename(title).replace(' \xa0', '')
     author = sanitize_filename(author).replace('\xa0 ', '')
-    picture = parsed_book.find('div', class_='bookimage').find('img')['src']
+    picture = parsed_book.select_one('div.bookimage img')['src']
     image_url = urllib.parse.urljoin(url, picture)
-    comment_section_tag = parsed_book.find(id='content').find_all('div', class_='texts')
+    comment_section_tag = parsed_book.select('content div.texts')
     comments = [comment.text.split(')')[-1] for comment in comment_section_tag]
-    genres_tag = parsed_book.find(id='content').find('span', class_='d_book').find_all('a')
+    genres_tag = parsed_book.select('.content span.d_book a')
     genres = [genres.text for genres in genres_tag]
     book_page = {
         'title': title,
@@ -88,7 +88,6 @@ def main():
             book_page = parse_book_page(url, page_response)
             download_txt(downloaded_book_response, book_page['title'])
             download_image(book_page['image'])
-            print('Данные книги удалось спарсить!')
         except requests.exceptions.HTTPError:
             print('Такой книги не существует')
         except requests.ConnectionError:

@@ -19,9 +19,9 @@ def parse_fantastic_category(url_pattern, book_url_pattern):
         page_response = requests.get(url)
         page_response.raise_for_status()
         soup = BeautifulSoup(page_response.text, 'lxml')
-        all_fantastic_book_ids = soup.find_all(class_='d_book')
+        all_fantastic_book_ids = soup.select('.d_book')
         for fantastic_book in all_fantastic_book_ids:
-            fantastic_book_id = fantastic_book.find('a')['href']
+            fantastic_book_id = fantastic_book.select_one('a')['href']
             param_id = int(fantastic_book_id.replace('/', '').lstrip('b'))
             params = {
                 'id': param_id
