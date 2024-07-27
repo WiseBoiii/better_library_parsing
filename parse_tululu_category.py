@@ -18,8 +18,17 @@ def parse_fantastic_category(url_pattern, book_url_pattern):
     fantastic_parser = argparse.ArgumentParser(
         description='Это программа является парсером бесплатной онлайн-библиотеки Tululu'
     )
-    fantastic_parser.add_argument('--start_page', help='С какой страницы каталога мы начинаем парсинг', type=int, default=1)
-    fantastic_parser.add_argument('--end_page', help='До какой страницы каталога идёт парсинг', type=int, default=10)
+    fantastic_parser.add_argument('--start_page', help='С какой страницы каталога мы начинаем парсинг',
+                                  type=int, default=1)
+    fantastic_parser.add_argument('--end_page', help='По какую страницу каталога идёт парсинг', type=str,
+                                  default=10)
+    fantastic_parser.add_argument('--skip_imgs', help='Параметр, отвечающий за парсинг обложек',
+                                  action='store_true')
+    fantastic_parser.add_argument('--skip_txt',
+                                  help='Параметр, отвечающий за парсинг текста самих книг', action='store_true')
+    fantastic_parser.add_argument('--dest_folder',
+                                  help='Параметр, отвечающий за выбор директории',
+                                  type=str, default='parsed_result')
     fantastic_args = fantastic_parser.parse_args()
     for page in range(fantastic_args.start_page, fantastic_args.end_page):
         url = f'{url_pattern}{page}'
@@ -33,14 +42,16 @@ def parse_fantastic_category(url_pattern, book_url_pattern):
             params = {
                 'id': param_id
             }
-            downloaded_fantastic_book_response = requests.get(downloading_url, params=params)
-            downloaded_fantastic_book_response.raise_for_status()
             fantastic_book_link = urllib.parse.urljoin(book_url_pattern, fantastic_book_id)
             fantastic_book_response = requests.get(fantastic_book_link)
             fantastic_book_response.raise_for_status()
             parsed_fantastic_book = parse_book_page(fantastic_book_link, fantastic_book_response)
-            download_image(parsed_fantastic_book['image'])
-            download_txt(downloaded_fantastic_book_response, parsed_fantastic_book['title'])
+            if not fantastic_args.skip_imgs:
+                download_image(parsed_fantastic_book['image'])
+            if not fantastic_args.skip_txt:
+                downloaded_fantastic_book_response = requests.get(downloading_url, params=params)
+                downloaded_fantastic_book_response.raise_for_status()
+                download_txt(downloaded_fantastic_book_response, parsed_fantastic_book['title'])
             fantastic_book_img_src = f"previews/{parsed_fantastic_book['image'].split('/')[-1]}"
             fantastic_book_path = f"books/{parsed_fantastic_book['title']}.txt"
             extended_parsed_fantastic_book = {
@@ -59,10 +70,3 @@ def parse_fantastic_category(url_pattern, book_url_pattern):
 
 
 print(parse_fantastic_category(fantastic_url_pattern, book_url_pattern))
-
-parser = argparse.ArgumentParser(
-        description='Это программа является парсером бесплатной онлайн-библиотеки Tululu'
-    )
-parser.add_argument('--start_page', help='С какой страницы каталога мы начинаем парсинг', type=int, default=1)
-parser.add_argument('--end_page', help='До какой страницы каталога идёт парсинг', type=int, default=20)
-args = parser.parse_args()

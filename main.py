@@ -71,7 +71,6 @@ def main():
     )
     parser.add_argument('--start_id', help='С какого id книги мы начинаем парсинг', type=int, default=1)
     parser.add_argument('--end_id', help='До какого id книги идёт парсинг', type=int, default=20)
-    args = parser.parse_args()
 
     for book_id in range(args.start_id, args.end_id):
         url = f"{url_pattern}b{book_id}/"
