@@ -68,6 +68,3 @@ def parse_fantastic_category(url_pattern, book_url_pattern):
     with open(f'{fantastic_args.dest_folder}/all_about_fantastic_books.json', 'wb') as fantastic_book_file:
         fantastic_book_file.write(all_about_fantastic_books)
     return all_about_fantastic_books
-
-
-print(parse_fantastic_category(fantastic_url_pattern, book_url_pattern))
