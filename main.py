@@ -12,8 +12,8 @@ import time
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-def download_txt(downloaded_book_response, title, folder='books/'):
-    folder = sanitize_filepath(folder)
+def download_txt(downloaded_book_response, title, folder):
+    folder = sanitize_filepath(f'{folder}/books')
     created_folder = Path(folder).mkdir(parents=True, exist_ok=True)
     file_name = sanitize_filename(title) + '.txt'
     filepath = os.path.join(folder, file_name)
@@ -28,8 +28,8 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
 
 
-def download_image(image_url, folder='previews/'):
-    folder = sanitize_filepath(folder)
+def download_image(image_url, folder):
+    folder = sanitize_filepath(f'{folder}/previews')
     picture_name = image_url.split('/')[-1]
     created_folder = Path(folder).mkdir(parents=True, exist_ok=True)
     file_name = sanitize_filename(picture_name)
