@@ -65,7 +65,7 @@ def parse_fantastic_category(url_pattern, book_url_pattern):
             }
             fantastic_books.append(extended_parsed_fantastic_book)
     all_about_fantastic_books = json.dumps(fantastic_books, ensure_ascii=False).encode('utf-8')
-    with open('all_about_fantastic_books.json', 'wb') as fantastic_book_file:
+    with open(f'{fantastic_args.dest_folder}/all_about_fantastic_books.json', 'wb') as fantastic_book_file:
         fantastic_book_file.write(all_about_fantastic_books)
     return all_about_fantastic_books
 
