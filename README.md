@@ -35,6 +35,6 @@ python main.py
 
 ![То, как выглядит папка с обложками книг](https://github.com/WiseBoiii/better_library_parsing/blob/main/README%20pics/previews%20sctructure.png)
  
-+ После отработки скрипта вы увидите две созданные у себя папки - previews(обложки) и books(сами книги с txt формате) - в которых будут сохранены соответствующие файлы.
++ После отработки скрипта вы увидите в выбранной вами директории (по умолчанию - parsed_result) - previews(обложки), books(сами книги с txt формате) и all_about_fantastic_books.json - в которых будут сохранены соответствующие файлы.
 
 ![alt text](https://github.com/WiseBoiii/TelegramPictureLoader/blob/main/nice.gif)
