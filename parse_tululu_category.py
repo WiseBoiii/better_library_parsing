@@ -19,7 +19,7 @@ def main():
     )
     fantastic_parser.add_argument('--start_page', help='С какой страницы каталога мы начинаем парсинг',
                                   type=int, default=1)
-    fantastic_parser.add_argument('--end_page', help='По какую страницу каталога идёт парсинг', type=str,
+    fantastic_parser.add_argument('--end_page', help='По какую страницу каталога идёт парсинг', type=int,
                                   default=10)
     fantastic_parser.add_argument('--skip_imgs', help='Параметр, отвечающий за парсинг обложек',
                                   action='store_true')
