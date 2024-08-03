@@ -27,7 +27,7 @@ def main():
                                   help='Параметр, отвечающий за парсинг текста самих книг', action='store_true')
     fantastic_parser.add_argument('--dest_folder',
                                   help='Параметр, отвечающий за выбор директории',
-                                  type=str, default='parsed_result')
+                                  type=str, default='parsed_result/')
     fantastic_args = fantastic_parser.parse_args()
     for page in range(fantastic_args.start_page, fantastic_args.end_page):
         url = f'{url_pattern}{page}'
@@ -46,11 +46,12 @@ def main():
             fantastic_book_response.raise_for_status()
             parsed_fantastic_book = parse_book_page(fantastic_book_link, fantastic_book_response)
             if not fantastic_args.skip_imgs:
-                download_image(parsed_fantastic_book['image'])
+                download_image(parsed_fantastic_book['image'], fantastic_args.dest_folder)
             if not fantastic_args.skip_txt:
                 downloaded_fantastic_book_response = requests.get(downloading_url, params=params)
                 downloaded_fantastic_book_response.raise_for_status()
-                download_txt(downloaded_fantastic_book_response, parsed_fantastic_book['title'])
+                download_txt(downloaded_fantastic_book_response, parsed_fantastic_book['title'],
+                             fantastic_args.dest_folder)
             fantastic_book_img_src = f"previews/{parsed_fantastic_book['image'].split('/')[-1]}"
             fantastic_book_path = f"books/{parsed_fantastic_book['title']}.txt"
             extended_parsed_fantastic_book = {
@@ -63,9 +64,10 @@ def main():
             }
             fantastic_books.append(extended_parsed_fantastic_book)
     all_about_fantastic_books = json.dumps(fantastic_books, ensure_ascii=False).encode('utf-8')
-    with open('parsed_result/all_about_fantastic_books.json', 'wb') as fantastic_book_file:
+    with open(f'{fantastic_args.dest_folder}/all_about_fantastic_books.json', 'wb') as fantastic_book_file:
         fantastic_book_file.write(all_about_fantastic_books)
 
 
 if __name__ == '__main__':
     main()
+

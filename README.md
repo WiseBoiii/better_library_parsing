@@ -22,15 +22,19 @@ pip install -r requirements.txt
    + `--start_page` - аргумент, отвечающий за то, с какого id книги начнется парсинг.
    + `--end_page` - аргумент, отвечающий за то, до какого id книги будет продолжаться парсинг.
      + По умолчанию значения данных аргументов установлены на 1 и 20 соответственно.
+   + `--dest_folder` - аргумент, отвечающий за путь к каталогу с результатами парсинга: картинкам, книгам.
+     + По умолчанию сохраняет книги и обложки в каталог parsed_result, в подкаталоги books и previews соответственно. 
 ```
-python main.py 
+python main.py --start_page 5 --end_page 40 --dest_folder C:\Users\User\Documents\
 ```
 4) После некоторого ожидания вы получите следующий результат, который будет выглядеть примерно так:
 
-![Вывод в консоль после работы скрипта](https://github.com/WiseBoiii/better_library_parsing/blob/main/MD%20pictures/изображение_2024-02-24_170550007.png)
+![Формат сохранения результата парсинга](https://github.com/WiseBoiii/better_library_parsing/blob/main/README%20pics/parsed_result%20structure.png)
 
-![Сохраненные файлы после работы скрипта](https://github.com/WiseBoiii/better_library_parsing/blob/main/MD%20pictures/изображение_2024-02-24_170729364.png)
+![То, как выглядит папка с текстом книг](https://github.com/WiseBoiii/better_library_parsing/blob/main/README%20pics/book%20directory.png)
+
+![То, как выглядит папка с обложками книг](https://github.com/WiseBoiii/better_library_parsing/blob/main/README%20pics/previews%20sctructure.png)
  
-+ После отработки скрипта вы увидите две созданные у себя папки - previews(обложки) и books(сами книги с txt формате) - в которых будут сохранены соответствующие файлы.
++ После отработки скрипта вы увидите в выбранной вами директории (по умолчанию - parsed_result) - previews(обложки), books(сами книги с txt формате) и all_about_fantastic_books.json - в которых будут сохранены соответствующие файлы.
 
-![alt text](https://github.com/WiseBoiii/better_library_parsing/blob/main/MD%20pictures/cat-nodding.gif)
+![alt text](https://github.com/WiseBoiii/TelegramPictureLoader/blob/main/nice.gif)
