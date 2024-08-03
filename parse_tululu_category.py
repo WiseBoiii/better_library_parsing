@@ -71,9 +71,8 @@ def main():
             print('Проблемы с соединением. Идет переподключение...')
             time.sleep(5)
 
-    all_about_fantastic_books = json.dumps(archive_fantastic_books, ensure_ascii=False).encode('utf-8')
-    with open(f'{fantastic_args.dest_folder}/all_about_fantastic_books.json', 'wb') as fantastic_book_file:
-        fantastic_book_file.write(all_about_fantastic_books)
+    with (open(f'{fantastic_args.dest_folder}/all_about_fantastic_books.json', 'w', encoding='utf-8') as fantastic_book_file):
+        json.dump(archive_fantastic_books, fantastic_book_file, ensure_ascii=False)
 
 
 if __name__ == '__main__':
