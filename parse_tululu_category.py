@@ -2,18 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import urllib3
-from main import parse_book_page, download_image, download_txt
+from core_functions import parse_book_page, download_image, download_txt
 import json
 import argparse
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-fantastic_url_pattern = 'https://tululu.org/l55/'
-book_url_pattern = 'https://tululu.org/'
-downloading_url = 'https://tululu.org/txt.php'
 
-
-def parse_fantastic_category(url_pattern, book_url_pattern):
+def main():
+    url_pattern = 'https://tululu.org/l55/'
+    book_url_pattern = 'https://tululu.org/'
+    downloading_url = 'https://tululu.org/txt.php'
     fantastic_books = []
     fantastic_parser = argparse.ArgumentParser(
         description='Это программа является парсером бесплатной онлайн-библиотеки Tululu'
@@ -64,9 +63,9 @@ def parse_fantastic_category(url_pattern, book_url_pattern):
             }
             fantastic_books.append(extended_parsed_fantastic_book)
     all_about_fantastic_books = json.dumps(fantastic_books, ensure_ascii=False).encode('utf-8')
-    with open('all_about_fantastic_books.json', 'wb') as fantastic_book_file:
+    with open('parsed_result/all_about_fantastic_books.json', 'wb') as fantastic_book_file:
         fantastic_book_file.write(all_about_fantastic_books)
-    return all_about_fantastic_books
 
 
-print(parse_fantastic_category(fantastic_url_pattern, book_url_pattern))
+if __name__ == '__main__':
+    main()
