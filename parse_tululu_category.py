@@ -44,7 +44,6 @@ def main():
                     'id': book_id
                 }
                 fantastic_book_link = urllib.parse.urljoin(url_pattern, fantastic_book_url)
-                print(fantastic_book_link)
                 fantastic_book_response = requests.get(fantastic_book_link)
                 fantastic_book_response.raise_for_status()
                 parsed_fantastic_book = parse_book_page(fantastic_book_link, fantastic_book_response)
