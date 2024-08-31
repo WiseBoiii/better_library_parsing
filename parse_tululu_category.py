@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import urllib3
-from core_functions import parse_book_page, download_image, download_txt
+from parse_business_literature import parse_book_page, download_image, download_txt
 import json
 import time
 import argparse
