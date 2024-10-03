@@ -6,6 +6,7 @@ from parse_business_literature import parse_book_page, download_image, download_
 import json
 import time
 import argparse
+import lxml
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

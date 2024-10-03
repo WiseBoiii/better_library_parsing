@@ -2,8 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import os
-from pathvalidate import sanitize_filename
-from pathvalidate import sanitize_filepath
+from pathvalidate import sanitize_filename, sanitize_filepath
 from pathlib import Path
 import urllib3
 import argparse
