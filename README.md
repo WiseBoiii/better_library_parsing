@@ -25,7 +25,7 @@ pip install -r requirements.txt
    + `--dest_folder` - аргумент, отвечающий за путь к каталогу с результатами парсинга: картинкам, книгам.
      + По умолчанию сохраняет книги и обложки в каталог parsed_result, в подкаталоги books и previews соответственно. 
 ```
-python main.py --start_page 5 --end_page 40 --dest_folder C:\Users\User\Documents\
+python main.py --start_page 5 --end_page 40 --dest_folder parsed_results
 ```
 4) После некоторого ожидания вы получите следующий результат, который будет выглядеть примерно так:
 
